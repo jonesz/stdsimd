@@ -5,31 +5,11 @@ rust: nightly
 matrix:
   fast_finish: true
   include:
-    - env: TARGET=i586-unknown-linux-gnu
-    - env: TARGET=i686-unknown-linux-gnu
-    - env: TARGET=x86_64-unknown-linux-gnu NO_ADD=1
-    - env: TARGET=x86_64-unknown-linux-gnu-emulated NO_ADD=1 STDSIMD_TEST_EVERYTHING=1
-    - env: TARGET=x86_64-linux-android
     - env: TARGET=arm-unknown-linux-gnueabihf
     - env: TARGET=arm-linux-androideabi
     - env: TARGET=armv7-unknown-linux-gnueabihf
     - env: TARGET=aarch64-unknown-linux-gnu
-    - env: TARGET=mips-unknown-linux-gnu NORUN=1
-    - env: TARGET=mipsel-unknown-linux-gnu NORUN=1
-    - env: TARGET=mips64-unknown-linux-gnuabi64 NORUN=1
-    - env: TARGET=mips64el-unknown-linux-gnuabi64 NORUN=1
     - env: TARGET=aarch64-linux-android
-    - env: TARGET=powerpc-unknown-linux-gnu
-    - env: TARGET=powerpc64-unknown-linux-gnu
-    - env: TARGET=powerpc64le-unknown-linux-gnu
-    - env: TARGET=s390x-unknown-linux-gnu NORUN=1
-    - os: osx
-      env: TARGET=i686-apple-darwin
-      script: ci/run.sh
-    - os: osx
-      env: TARGET=x86_64-apple-darwin NO_ADD=1
-      script: ci/run.sh
-    - env: TARGET=wasm32-unknown-unknown
     - env: TARGET=thumbv6m-none-eabi NOSTD=1
     - env: TARGET=thumbv7m-none-eabi NOSTD=1
     - env: TARGET=thumbv7em-none-eabi NOSTD=1
@@ -75,6 +55,3 @@ script:
 notifications:
   email:
     on_success: never
-env:
-  global:
-    secure: "jmh7FfVwtPYQN/xPrVYmX7ys70GvX9YsKYtDpp8UwtIihCr81KHi2P2a1/KZNvQN0gPO+nneKieCbNQSCEtxDG9plUoB+OhX8ov9g3ImTJbyt+oW35Vlqq9ftB+Hr/Wn42o4OSTYxRfy1gf9VMePBaJfdkuym3BB75K4s+k+akuVqJv+KAm3zz0wSqU4O/evj2EGz1ldMzqxpogrO2WJQkXyl4xaW/1E0y8IZfRy0bJPKALFUpTDp39ZiWvzjNdr8CXUW1DChJdFPNo7yswxyl/NL5e/meHqF2dzS5b0YyOhcCzlBm7eZoEwyHZWB73t7n5Tuo0uYpX/kBXPAvtDrljQjBNcpm9vJtg6sj3oG0bGAI8pJfNNpLdHLHO6CjmORGP/rzZLeRdEFVb8t7UIXG7l3NcoBpRNiwPFY4gpE5dgiRsKjNrtmNe3GahhsYwbPkc+QUeQFIDtYYRxdJVZj+KvU9jIEpRh5Zv8FZBfsfx0LcLEdtRBjJxFNGGO5NY8nP0OWNVyt4ckRbRMtVzcbcOdzcfUc74/wZYZj8SrfcbSqsfylMQbxLAHJCynvuFmoMf3udPqP3aPuO+4EjDYDIQ1kHwKK87lwqlXFHdhRepAmhRR//g3bDUxzXd96KJqbFU3MYZnn/jzIi0kl+jx3FxivT380cYLVjrD29aGc7M="
