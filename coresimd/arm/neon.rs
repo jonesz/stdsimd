@@ -108,17 +108,6 @@ pub struct poly8x8x4_t(
 #[allow(improper_ctypes)]
 extern "C" {
 
-    /* FIXME: vmulu isn't the correct link_name. */
-    #[cfg_attr(
-        target_arch = "aarch64",
-        link_name = "llvm.aarch64.neon.umul.u8.v8u8"
-    )]
-    #[cfg_attr(
-        target_arch = "arm",
-        link_name = "llvm.arm.neon.vmulu.u8.v8u8"
-    )]
-    fn vmulu_v8u8_(a: uint8x8_t, b: uint8x8_t) -> uint8x8_t;
-
     #[cfg_attr(
         target_arch = "aarch64",
         link_name = "llvm.aarch64.neon.umull.u8.v8u8"
@@ -128,28 +117,6 @@ extern "C" {
         link_name = "llvm.arm.neon.vmullu.u8.v8u8"
     )]
     fn vmullu_v8u8_(a: uint8x8_t, b: uint8x8_t) -> uint16x8_t;
-
-    /* FIXME. vmulqu likely isn't the correct link_name. */
-    #[cfg_attr(
-        target_arch = "aarch64",
-        link_name = "llvm.aarch64.neon.umulq.u8.v16u8"
-    )]
-    #[cfg_attr(
-        target_arch = "arm",
-        link_name = "llvm.arm.neon.vmulqu.u8.v16u8"
-    )]
-    fn vmulqu_v16u8_(a: uint8x16_t, b: uint8x16_t) -> uint8x16_t;
-
-    /* FIXME: vmulu isn't the correct link_name. */
-    #[cfg_attr(
-        target_arch = "aarch64",
-        link_name = "llvm.aarch64.neon.umul.u16.v4u16"
-    )]
-    #[cfg_attr(
-        target_arch = "arm",
-        link_name = "llvm.arm.neon.vmulu.u16.v4u16"
-    )]
-    fn vmulu_v4u16_(a: uint16x4_t, b: uint16x4_t) -> uint16x4_t;
 
     #[cfg_attr(
         target_arch = "aarch64",
@@ -161,28 +128,6 @@ extern "C" {
     )]
     fn vmullu_v4u16_(a: uint16x4_t, b: uint16x4_t) -> uint32x4_t;
 
-    /* FIXME. vmulqu likely isn't the correct link_name. */
-    #[cfg_attr(
-        target_arch = "aarch64",
-        link_name = "llvm.aarch64.neon.umulq.u16.v8u16"
-    )]
-    #[cfg_attr(
-        target_arch = "arm",
-        link_name = "llvm.arm.neon.vmulqu.u16.v8u16"
-    )]
-    fn vmulqu_v8u16_(a: uint16x8_t, b: uint16x8_t) -> uint16x8_t;
-
-    /* FIXME. vmulu isn't the correct link_name. */
-    #[cfg_attr(
-        target_arch = "aarch64",
-        link_name = "llvm.aarch64.neon.umul.u32.v2u32"
-    )]
-    #[cfg_attr(
-        target_arch = "arm",
-        link_name = "llvm.arm.neon.vmulu.u32.v2u32"
-    )]
-    fn vmulu_v2u32_(a: uint32x2_t, b: uint32x2_t) -> uint32x2_t;
-
     #[cfg_attr(
         target_arch = "aarch64",
         link_name = "llvm.aarch64.neon.umull.u32.v2u32"
@@ -192,17 +137,6 @@ extern "C" {
         link_name = "llvm.arm.neon.vmullu.u32.v2u32"
     )]
     fn vmullu_v2u32_(a: uint32x2_t, b: uint32x2_t) -> uint64x2_t;
-
-    /* FIXME. vmulqu likely isn't the correct link_name. */
-    #[cfg_attr(
-        target_arch = "aarch64",
-        link_name = "llvm.aarch64.neon.umulq.u32.v4u32"
-    )]
-    #[cfg_attr(
-        target_arch = "arm",
-        link_name = "llvm.arm.neon.vmulqu.u32.v4u32"
-    )]
-    fn vmulqu_v4u32_(a: uint32x4_t, b: uint32x4_t) -> uint32x4_t;
 
     #[cfg_attr(
         target_arch = "aarch64",
@@ -399,7 +333,7 @@ extern "C" {
 #[cfg_attr(all(test, target_arch = "aarch64"), assert_intrs(vmull))]
 */
 pub unsafe fn vmulu_v8(a: uint8x8_t, b: uint8x8_t) -> uint8x8_t {
-    vmulu_v8u8_(a, b)
+    simd_mul(a, b)
 }
 
 /// Vector long multiply.
@@ -423,8 +357,8 @@ pub unsafe fn vmullu_v8(a: uint8x8_t, b: uint8x8_t) -> uint16x8_t {
 #[cfg_attr(all(test, target_arch = "aarch64"), assert_intrs(vmull))]
 */
 pub unsafe fn vmulqu_v8(a: uint8x16_t, b: uint8x16_t) -> uint8x16_t {
-    vmulqu_v16u8_(a, b)
-}
+    simd_mul(a, b)
+} 
 
 /// Vector multiply.
 #[inline]
@@ -435,7 +369,7 @@ pub unsafe fn vmulqu_v8(a: uint8x16_t, b: uint8x16_t) -> uint8x16_t {
 #[cfg_attr(all(test, target_arch = "aarch64"), assert_intrs(vmull))]
 */
 pub unsafe fn vmulu_v16(a: uint16x4_t, b: uint16x4_t) -> uint16x4_t {
-    vmulu_v4u16_(a, b)
+    simd_mul(a, b)
 }
 
 /// Vector long multiply.
@@ -459,7 +393,7 @@ pub unsafe fn vmullu_v16(a: uint16x4_t, b: uint16x4_t) -> uint32x4_t {
 #[cfg_attr(all(test, target_arch = "aarch64"), assert_intrs(vmull))]
 */
 pub unsafe fn vmulqu_v16(a: uint16x8_t, b: uint16x8_t) -> uint16x8_t {
-    vmulqu_v8u16_(a, b)
+    simd_mul(a, b)
 }
 
 /// Vector multiply.
@@ -471,7 +405,7 @@ pub unsafe fn vmulqu_v16(a: uint16x8_t, b: uint16x8_t) -> uint16x8_t {
 #[cfg_attr(all(test, target_arch = "aarch64"), assert_intrs(vmull))]
 */
 pub unsafe fn vmulu_v32(a: uint32x2_t, b: uint32x2_t) -> uint32x2_t {
-    vmulu_v2u32_(a, b)
+    simd_mul(a, b)
 }
 
 /// Vector long multiply.
@@ -495,7 +429,7 @@ pub unsafe fn vmullu_v32(a: uint32x2_t, b: uint32x2_t) -> uint64x2_t {
 #[cfg_attr(all(test, target_arch = "aarch64"), assert_intrs(vmull))]
 */
 pub unsafe fn vmulqu_v32(a: uint32x4_t, b: uint32x4_t) -> uint32x4_t {
-    vmulqu_v4u32_(a, b)
+    simd_mul(a, b)
 }
 
 /// Vector long multiply.
