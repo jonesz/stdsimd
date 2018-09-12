@@ -178,7 +178,10 @@ extern "C" {
     )]
     fn frsqrte_v2f32(a: float32x2_t) -> float32x2_t;
 
-    #[cfg_attr(target_arch = "arm", link_name = "llvm.arm.neon.vpmins.v8i8")]
+    #[cfg_attr(
+        target_arch = "arm",
+        link_name = "llvm.arm.neon.vpmins.v8i8"
+    )]
     #[cfg_attr(
         target_arch = "aarch64",
         link_name = "llvm.aarch64.neon.sminp.v8i8"
