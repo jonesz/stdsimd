@@ -68,30 +68,18 @@ pub struct poly8x16x4_t(
 #[allow(improper_ctypes)]
 extern "C" {
     #[link_name = "llvm.aarch64.neon.umull.u8.v8u8"]
-    fn vmull_u8_(a: uint8x8_t, b: uint8x8_t) -> uint16x8_t;
-    //#[link_name = "llvm.aarch64.neon.umull.u8.v8u16"]
-    //fn vmullq_u8_(a: uint8x16_t, b: uint8x16_t) -> uint16x8_t;
+    fn vmull_v8u8_(a: uint8x8_t, b: uint8x8_t) -> uint16x8_t;
     #[link_name = "llvm.aarch64.neon.umull.u16.v4u16"]
-    fn vmull_u16_(a: uint16x4_t, b: uint16x4_t) -> uint32x4_t;
-    //#[link_name = "llvm.aarch64.neon.umull.u16.v8u16"]
-    //fn vmullq_u16_(a: uint16x8_t, b: uint16x8_t) -> uint32x4_t;
+    fn vmull_v4u16_(a: uint16x4_t, b: uint16x4_t) -> uint32x4_t;
     #[link_name = "llvm.aarch64.neon.umull.u32.v2u32"]
-    fn vmull_u32_(a: uint32x2_t, b: uint32x2_t) -> uint64x2_t;
-    //#[link_name = "llvm.aarch64.neon.umull.u32.v4u32"]
-    //fn vmullq_u32_(a: uint32x4_t, b: uint32x4_t) -> uint64x2_t;
+    fn vmull_v2u32_(a: uint32x2_t, b: uint32x2_t) -> uint64x2_t;
 
     #[link_name = "llvm.aarch64.neon.smull.i8.v8i8"]
-    fn vmull_i8_(a: int8x8_t, b: int8x8_t) -> int16x8_t;
-    //#[link_name = "llvm.aarch64.neon.smull.i8.v8i16"]
-    //fn vmullq_i8_(a: int8x16_t, b: int8x16_t) -> int16x8_t;
+    fn vmull_v8i8_(a: int8x8_t, b: int8x8_t) -> int16x8_t;
     #[link_name = "llvm.aarch64.neon.smull.i16.v4i16"]
-    fn vmull_i16_(a: int16x4_t, b: int16x4_t) -> int32x4_t;
-    //#[link_name = "llvm.aarch64.neon.smull.i16.v8i16"]
-    //fn vmullq_i16_(a: int16x8_t, b: int16x8_t) -> int32x4_t;
+    fn vmull_v4i16_(a: int16x4_t, b: int16x4_t) -> int32x4_t;
     #[link_name = "llvm.aarch64.neon.smull.u32.v2i32"]
-    fn vmull_i32_(a: int32x2_t, b: int32x2_t) -> int64x2_t;
-    //#[link_name = "llvm.aarch64.neon.smull.u32.v4i32"]
-    //fn vmullq_i32_(a: int32x4_t, b: int32x4_t) -> int64x2_t;
+    fn vmull_v2i32_(a: int32x2_t, b: int32x2_t) -> int64x2_t;
 
     #[link_name = "llvm.aarch64.neon.smaxv.i8.v8i8"]
     fn vmaxv_s8_(a: int8x8_t) -> i8;
@@ -297,17 +285,8 @@ pub unsafe fn vaddd_u64(a: uint64x1_t, b: uint64x1_t) -> uint64x1_t {
 // FIXME
 /* #[cfg_attr(test, assert_instr())] */
 pub unsafe fn vmull_u8(a: uint8x8_t, b: uint8x8_t) -> uint16x8_t {
-    vmull_u8_(a, b)
+    vmull_v8u8_(a, b)
 }
-
-/* /// Vector saturated multiply.
-#[inline]
-#[target_feature(enable = "neon")]
-// FIXME
-/* #[cfg_attr(test, assert_instr())] */
-pub unsafe fn vmulq_u8(a: uint8x16_t, b: uint8x16_t) -> uint16x8_t {
-    vmulq_u8_(a, b)
-} */
 
 /// Vector long multiply.
 #[inline]
@@ -315,33 +294,16 @@ pub unsafe fn vmulq_u8(a: uint8x16_t, b: uint8x16_t) -> uint16x8_t {
 // FIXME
 /* #[cfg_attr(test, assert_instr())] */
 pub unsafe fn vmull_u16(a: uint16x4_t, b: uint16x4_t) -> uint32x4_t {
-    vmull_u16_(a, b)
+    vmull_v4u16_(a, b)
 }
-
-/* /// Vector saturated multiply.
-#[inline]
-#[target_feature(enable = "neon")]
-// FIXME
-/* #[cfg_attr(test, assert_instr())] */
-pub unsafe fn vmullq_u16(a: uint16x8_t, b: uint16x8_t) -> uint32x4_t {
-    vmullq_u16_(a, b)
-} */
 
 /// Vector long multiply.
 #[inline]
 #[target_feature(enable = "neon")]
 /* #[cfg_attr(test, assert_instr())] */
 pub unsafe fn vmull_u32(a: uint32x2_t, b: uint32x2_t) -> uint64x2_t {
-    vmull_u32_(a, b)
+    vmull_v2u32_(a, b)
 }
-
-/* /// Vector saturated multiply.
-#[inline]
-#[target_feature(enable = "neon")]
-/* #[cfg_attr(test, assert_instr())] */
-pub unsafe fn vmullq_u32(a: uint32x4_t, b: uint32x4_t) -> uint64x2_t {
-    vmullq_u32_(a, b)
-} */
 
 /// Vector long multiply.
 #[inline]
@@ -349,7 +311,7 @@ pub unsafe fn vmullq_u32(a: uint32x4_t, b: uint32x4_t) -> uint64x2_t {
 // FIXME
 /* #[cfg_attr(test, assert_instr())] */
 pub unsafe fn vmull_i8(a: int8x8_t, b: int8x8_t) -> int16x8_t {
-    vmull_i8_(a, b)
+    vmull_v8i8_(a, b)
 }
 
 /// Vector long multiply.
@@ -358,7 +320,7 @@ pub unsafe fn vmull_i8(a: int8x8_t, b: int8x8_t) -> int16x8_t {
 // FIXME
 /* #[cfg_attr(test, assert_instr())] */
 pub unsafe fn vmull_i16(a: int16x4_t, b: int16x4_t) -> int32x4_t {
-    vmull_i16_(a, b)
+    vmull_v4i16_(a, b)
 }
 
 /// Vector long multiply.
@@ -367,7 +329,7 @@ pub unsafe fn vmull_i16(a: int16x4_t, b: int16x4_t) -> int32x4_t {
 // FIXME
 /* #[cfg_attr(test, assert_instr())] */
 pub unsafe fn vmull_i32(a: int32x2_t, b: int32x2_t) -> int64x2_t {
-    vmull_i32_(a, b)
+    vmull_v2i32_(a, b)
 }
 
 /// Horizontal vector max.
