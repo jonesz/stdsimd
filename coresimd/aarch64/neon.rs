@@ -279,6 +279,20 @@ pub unsafe fn vaddd_u64(a: uint64x1_t, b: uint64x1_t) -> uint64x1_t {
     simd_add(a, b)
 }
 
+/// Vector multiply.
+#[inline]
+#[target_feature(enable = "neon")]
+pub unsafe fn vmul_u8(a: uint8x8_t, b: uint8x8_t) -> uint8x8_t {
+    simd_mul(a, b)
+}
+
+/// Vector saturated multiply.
+#[inline]
+#[target_feature(enable = "neon")]
+pub unsafe fn vmulq_u8(a: uint8x16_t, b: uint8x16_t) -> uint8x16_t {
+    simd_mul(a, b)
+}
+
 /// Vector long multiply.
 #[inline]
 #[target_feature(enable = "neon")]
@@ -286,6 +300,20 @@ pub unsafe fn vaddd_u64(a: uint64x1_t, b: uint64x1_t) -> uint64x1_t {
 /* #[cfg_attr(test, assert_instr())] */
 pub unsafe fn vmull_u8(a: uint8x8_t, b: uint8x8_t) -> uint16x8_t {
     vmull_v8u8_(a, b)
+}
+
+/// Vector multiply.
+#[inline]
+#[target_feature(enable = "neon")]
+pub unsafe fn vmul_u16(a: uint16x4_t, b: uint16x4_t) -> uint16x4_t {
+    simd_mul(a, b)
+}
+
+/// Vector saturated multiply.
+#[inline]
+#[target_feature(enable = "neon")]
+pub unsafe fn vmulq_u16(a: uint16x8_t, b: uint16x8_t) -> uint16x8_t {
+    simd_mul(a, b)
 }
 
 /// Vector long multiply.
@@ -297,12 +325,40 @@ pub unsafe fn vmull_u16(a: uint16x4_t, b: uint16x4_t) -> uint32x4_t {
     vmull_v4u16_(a, b)
 }
 
+/// Vector multiply.
+#[inline]
+#[target_feature(enable = "neon")]
+pub unsafe fn vmul_u32(a: uint32x2_t, b: uint32x2_t) -> uint32x2_t {
+    simd_mul(a, b)
+}
+
+/// Vector saturated multiply.
+#[inline]
+#[target_feature(enable = "neon")]
+pub unsafe fn vmulq_u32(a: uint32x4_t, b: uint32x4_t) -> uint32x4_t {
+    simd_mul(a, b)
+}
+
 /// Vector long multiply.
 #[inline]
 #[target_feature(enable = "neon")]
 /* #[cfg_attr(test, assert_instr())] */
 pub unsafe fn vmull_u32(a: uint32x2_t, b: uint32x2_t) -> uint64x2_t {
     vmull_v2u32_(a, b)
+}
+
+/// Vector multiply.
+#[inline]
+#[target_feature(enable = "neon")]
+pub unsafe fn vmul_i8(a: int8x8_t, b: int8x8_t) -> int8x8_t {
+    simd_mul(a, b)
+}
+
+/// Vector saturated multiply.
+#[inline]
+#[target_feature(enable = "neon")]
+pub unsafe fn vmulq_i8(a: int8x16_t, b: int8x16_t) -> int8x16_t {
+    simd_mul(a, b)
 }
 
 /// Vector long multiply.
@@ -314,6 +370,20 @@ pub unsafe fn vmull_i8(a: int8x8_t, b: int8x8_t) -> int16x8_t {
     vmull_v8i8_(a, b)
 }
 
+/// Vector multiply.
+#[inline]
+#[target_feature(enable = "neon")]
+pub unsafe fn vmul_i16(a: int16x4_t, b: int16x4_t) -> int16x4_t {
+    simd_mul(a, b)
+}
+
+/// Vector saturated multiply.
+#[inline]
+#[target_feature(enable = "neon")]
+pub unsafe fn vmulq_i16(a: int16x8_t, b: int16x8_t) -> int16x8_t {
+    simd_mul(a, b)
+}
+
 /// Vector long multiply.
 #[inline]
 #[target_feature(enable = "neon")]
@@ -321,6 +391,20 @@ pub unsafe fn vmull_i8(a: int8x8_t, b: int8x8_t) -> int16x8_t {
 /* #[cfg_attr(test, assert_instr())] */
 pub unsafe fn vmull_i16(a: int16x4_t, b: int16x4_t) -> int32x4_t {
     vmull_v4i16_(a, b)
+}
+
+/// Vector multiply.
+#[inline]
+#[target_feature(enable = "neon")]
+pub unsafe fn vmul_i32(a: int32x2_t, b: int32x2_t) -> int32x2_t {
+    simd_mul(a, b)
+}
+
+/// Vector saturated multiply.
+#[inline]
+#[target_feature(enable = "neon")]
+pub unsafe fn vmulq_i32(a: int32x4_t, b: int32x4_t) -> int32x4_t {
+    simd_mul(a, b)
 }
 
 /// Vector long multiply.
@@ -1750,7 +1834,27 @@ mod tests {
             mem::transmute(vaddd_u64(mem::transmute(a), mem::transmute(b)));
         assert_eq!(r, e);
     }
-    
+
+    #[simd_test(enable = "neon")]
+    unsafe fn test_vmul_u8() {
+        let a = u8x8::new(2, 3, 4, 5, 5, 4, 3, 2);
+        let b = u8x8::new(5, 4, 3, 2, 5, 4, 3, 2);
+        let e = u8x8::new(10, 12, 12, 10, 25, 16, 9, 4);
+        let r: u8x8 = ::mem::transmute(vmul_u8(
+                ::mem::transmute(a), ::mem::transmute(b)));
+        assert_eq!(r, e);
+    }
+
+    #[simd_test(enable = "neon")]
+    unsafe fn test_vmulq_u8() {
+        let a = u8x16::new(2, 3, 4, 5, 5, 4, 3, 2, 4, 5, 2, 3, 4, 5, 1, 2);
+        let b = u8x16::new(5, 4, 3, 2, 5, 4, 3, 2, 2, 3, 4, 5, 6, 7, 8, 2);
+        let e = u8x16::new(10, 12, 12, 10, 25, 16, 9, 4, 8, 15, 8, 15, 24, 35, 8, 4);
+        let r: u8x16 = ::mem::transmute(vmulq_u8(
+                ::mem::transmute(a), ::mem::transmute(b)));
+        assert_eq!(r, e);
+    }
+
     #[simd_test(enable = "neon")]
     unsafe fn test_vmull_u8() {
         let a = u8x8::new(2, 3, 4, 5, 5, 4, 3, 2);
@@ -1761,11 +1865,52 @@ mod tests {
     }
 
     #[simd_test(enable = "neon")]
+    unsafe fn test_vmul_u16() {
+        let a = u16x4::new(2, 3, 4, 5);
+        let b = u16x4::new(5, 4, 3, 2);
+        let e = u16x4::new(10, 12, 12, 10);
+        let r: u16x4 = ::mem::transmute(vmul_u16(
+                ::mem::transmute(a), ::mem::transmute(b)));
+        assert_eq!(r, e);
+    }
+
+    #[simd_test(enable = "neon")]
+    unsafe fn test_vmulq_u16() {
+        let a = u16x8::new(2, 3, 4, 5, 4, 3, 2, 4);
+        let b = u16x8::new(5, 4, 3, 2, 5, 4, 3, 2);
+        let e = u16x8::new(10, 12, 12, 10, 20, 12, 6, 8);
+        let r: u16x8 = ::mem::transmute(vmulq_u16(
+                ::mem::transmute(a), ::mem::transmute(b)));
+        assert_eq!(r, e);
+    }
+
+    #[simd_test(enable = "neon")]
     unsafe fn test_vmull_u16() {
         let a = u16x4::new(10, 100, 50, 6);
         let b = u16x4::new(3, 9, 2, 3);
         let e = u32x4::new(30, 900, 100, 18);
-        let r: u32x4 = ::mem::transmute(vmull_u16(::mem::transmute(a), ::mem::transmute(b)));
+        let r: u32x4 = ::mem::transmute(vmull_u16(
+                ::mem::transmute(a), ::mem::transmute(b)));
+        assert_eq!(r, e);
+    }
+
+    #[simd_test(enable = "neon")]
+    unsafe fn test_vmul_u32() {
+        let a = u32x2::new(2, 4);
+        let b = u32x2::new(4, 8);
+        let e = u32x2::new(8, 32);
+        let r: u32x2 = ::mem::transmute(vmul_u32(
+                ::mem::transmute(a), ::mem::transmute(b)));
+        assert_eq!(r, e);
+    }
+
+    #[simd_test(enable = "neon")]
+    unsafe fn test_vmulq_u32() {
+        let a = u32x4::new(2, 4, 8, 2);
+        let b = u32x4::new(4, 3, 2, 6);
+        let e = u32x4::new(8, 12, 16, 12);
+        let r: u32x4 = ::mem::transmute(vmulq_u32(
+                ::mem::transmute(a), ::mem::transmute(b)));
         assert_eq!(r, e);
     }
 
@@ -1779,6 +1924,25 @@ mod tests {
     }
 
     #[simd_test(enable = "neon")]
+    unsafe fn test_vmul_i8() {
+        let a = i8x8::new(-1, -2, -3, 3, 4, 5, 1, 2);
+        let b = i8x8::new(1, 2, 3, 4, 1, 2, 3, 4);
+        let e = i8x8::new(-1, -4, -9, 12, 4, 10, 3, 8);
+        let r: i8x8 = ::mem::transmute(vmul_i8(
+                ::mem::transmute(a), ::mem::transmute(b)));
+        assert_eq!(r, e);
+    }
+
+    #[simd_test(enable = "neon")]
+    unsafe fn test_vmulq_i8() {
+        let a = i8x16::new(-1, 2, 3, 4, -1, 2, 3, 4, -1, 2, 3, 4, -1, 2, 3, 4);
+        let b = i8x16::new(1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4);
+        let e = i8x16::new(-1, 4, 9, 16, -1, 4, 9, 16, -1, 4, 9, 16, -1, 4, 9, 16);
+        let r: i8x16 = ::mem::transmute(vmulq_i8(::mem::transmute(a), ::mem::transmute(b)));
+        assert_eq!(r, e);
+    }
+
+    #[simd_test(enable = "neon")]
     unsafe fn test_vmull_i8() {
         let a = i8x8::new(-1, -2, -3, 3, 4, 5, 1, 2);
         let b = i8x8::new(1, 2, 3, 4, 1, 2, 3, 4);
@@ -1788,11 +1952,51 @@ mod tests {
     }
 
     #[simd_test(enable = "neon")]
+    unsafe fn test_vmul_i16() {
+        let a = i16x4::new(-1, 2, 3, 4);
+        let b = i16x4::new(3, 4, -2, -4);
+        let e = i16x4::new(-3, 8, -6, -16);
+        let r: i16x4 = ::mem::transmute(vmul_i16(
+                ::mem::transmute(a), ::mem::transmute(b)));
+        assert_eq!(r, e);
+    }
+
+    #[simd_test(enable = "neon")]
+    unsafe fn test_vmulq_i16() {
+        let a = i16x8::new(-1, 2, 3, 4, -1, -2, -3, -4);
+        let b = i16x8::new(2, 3, 2, 1, -3, -2, 2, 1);
+        let e = i16x8::new(-2, 6, 6, 4, 3, 4, -6, -4);
+        let r: i16x8 = ::mem::transmute(vmulq_i16(
+                ::mem::transmute(a), ::mem::transmute(b)));
+        assert_eq!(r, e);
+    }
+
+    #[simd_test(enable = "neon")]
     unsafe fn test_vmull_i16() {
         let a = i16x4::new(-1, -2, -3, 3);
         let b = i16x4::new(1, 2, 3, 4);
         let e = i32x4::new(-1, -4, -9, 12);
         let r: i32x4 = ::mem::transmute(vmull_i16(::mem::transmute(a), ::mem::transmute(b)));
+        assert_eq!(r, e);
+    }
+
+    #[simd_test(enable = "neon")]
+    unsafe fn test_vmul_i32() {
+        let a = i32x2::new(1, 2);
+        let b = i32x2::new(-2, 4);
+        let e = i32x2::new(-2, 8);
+        let r: i32x2 = ::mem::transmute(vmul_i32(
+                ::mem::transmute(a), ::mem::transmute(b)));
+        assert_eq!(r, e);
+    }
+
+    #[simd_test(enable = "neon")]
+    unsafe fn test_vmulq_i32() {
+        let a = i32x4::new(-1, 2, 3, -4);
+        let b = i32x4::new(3, 4, -2, 8);
+        let e = i32x4::new(-3, 8, -6, -32);
+        let r: i32x4 = ::mem::transmute(vmulq_i32(
+                ::mem::transmute(a), ::mem::transmute(b)));
         assert_eq!(r, e);
     }
 
